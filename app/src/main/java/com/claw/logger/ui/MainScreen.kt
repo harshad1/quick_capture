@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CameraAlt
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,7 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +43,7 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = { Text("Quick Log") },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(
@@ -73,15 +76,15 @@ fun MainScreen(
                 ) {
                     ActionCard(
                         modifier = Modifier.weight(1f),
-                        title = "Take Photo",
-                        subtitle = "Capture and save to your selected folder",
+                        icon = Icons.Rounded.CameraAlt,
+                        contentDescription = "Take photo",
                         onClick = onPhotoClick,
                         primary = true,
                     )
                     ActionCard(
                         modifier = Modifier.weight(1f),
-                        title = "Record Audio",
-                        subtitle = "Open the recorder and import the result",
+                        icon = Icons.Rounded.Mic,
+                        contentDescription = "Record audio",
                         onClick = onAudioClick,
                         primary = false,
                     )
@@ -93,15 +96,15 @@ fun MainScreen(
                 ) {
                     ActionCard(
                         modifier = Modifier.weight(1f),
-                        title = "Take Photo",
-                        subtitle = "Capture and save to your selected folder",
+                        icon = Icons.Rounded.CameraAlt,
+                        contentDescription = "Take photo",
                         onClick = onPhotoClick,
                         primary = true,
                     )
                     ActionCard(
                         modifier = Modifier.weight(1f),
-                        title = "Record Audio",
-                        subtitle = "Open the recorder and import the result",
+                        icon = Icons.Rounded.Mic,
+                        contentDescription = "Record audio",
                         onClick = onAudioClick,
                         primary = false,
                     )
@@ -114,8 +117,8 @@ fun MainScreen(
 @Composable
 private fun ActionCard(
     modifier: Modifier,
-    title: String,
-    subtitle: String,
+    icon: ImageVector,
+    contentDescription: String,
     onClick: () -> Unit,
     primary: Boolean,
 ) {
@@ -144,16 +147,12 @@ private fun ActionCard(
                 .fillMaxSize()
                 .padding(12.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodyLarge,
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                modifier = Modifier.size(88.dp),
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.claw.logger
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -98,6 +99,16 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        if (savedInstanceState == null) {
+            handleShortcutIntent(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleShortcutIntent(intent)
     }
 
     private fun launchCamera() {
@@ -125,12 +136,18 @@ class MainActivity : ComponentActivity() {
             return
         }
 
-        val intent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
-        if (intent.resolveActivity(packageManager) == null) {
+        try {
+            recordAudio.launch(Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION))
+        } catch (_: ActivityNotFoundException) {
             toast("No recorder app available")
-            return
         }
-        recordAudio.launch(intent)
+    }
+
+    private fun handleShortcutIntent(intent: Intent) {
+        when (intent.action) {
+            ACTION_TAKE_PHOTO_SHORTCUT -> launchCamera()
+            ACTION_RECORD_AUDIO_SHORTCUT -> launchAudioRecorder()
+        }
     }
 
     private fun cleanupPendingPhoto() {
@@ -141,5 +158,10 @@ class MainActivity : ComponentActivity() {
 
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        const val ACTION_TAKE_PHOTO_SHORTCUT = "com.claw.logger.action.TAKE_PHOTO"
+        const val ACTION_RECORD_AUDIO_SHORTCUT = "com.claw.logger.action.RECORD_AUDIO"
     }
 }
