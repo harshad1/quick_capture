@@ -1,4 +1,4 @@
-package com.claw.logger.storage
+package com.quick.capture.storage
 
 import android.content.Context
 import android.net.Uri

@@ -1,4 +1,4 @@
-package com.claw.logger.ui
+package com.quick.capture.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -43,7 +43,7 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Quick Log") },
+                title = { Text("Quick Capture") },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(

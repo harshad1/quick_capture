@@ -1,4 +1,4 @@
-package com.claw.logger.data
+package com.quick.capture.data
 
 enum class PhotoScale(
     val storageValue: String,

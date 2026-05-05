@@ -2,7 +2,7 @@
 
 ## Project
 
-- Name: `QLog`
+- Name: `Quick Capture`
 - Platform: native Android
 - Language: Kotlin
 - UI: Jetpack Compose + Material 3
@@ -34,14 +34,14 @@
 
 ## Key Files
 
-- [plan.md](/Users/harshad/code/claw_logger/plan.md): build plan and scope
-- [app/build.gradle.kts](/Users/harshad/code/claw_logger/app/build.gradle.kts): Android module config and signing config
-- [app/src/main/AndroidManifest.xml](/Users/harshad/code/claw_logger/app/src/main/AndroidManifest.xml): activities, share target, file provider
-- [app/src/main/java/com/claw/logger/MainActivity.kt](/Users/harshad/code/claw_logger/app/src/main/java/com/claw/logger/MainActivity.kt): main UI and delegated capture flows
-- [app/src/main/java/com/claw/logger/SettingsActivity.kt](/Users/harshad/code/claw_logger/app/src/main/java/com/claw/logger/SettingsActivity.kt): settings and SAF folder picking
-- [app/src/main/java/com/claw/logger/ShareImportActivity.kt](/Users/harshad/code/claw_logger/app/src/main/java/com/claw/logger/ShareImportActivity.kt): import shared images/audio
-- [app/src/main/java/com/claw/logger/importing/ImportRepository.kt](/Users/harshad/code/claw_logger/app/src/main/java/com/claw/logger/importing/ImportRepository.kt): import/downsample logic
-- [app/src/main/java/com/claw/logger/storage/SafWriter.kt](/Users/harshad/code/claw_logger/app/src/main/java/com/claw/logger/storage/SafWriter.kt): SAF writes and filename collision handling
+- [plan.md](/Users/harshad/code/quick_capture/plan.md): build plan and scope
+- [app/build.gradle.kts](/Users/harshad/code/quick_capture/app/build.gradle.kts): Android module config and signing config
+- [app/src/main/AndroidManifest.xml](/Users/harshad/code/quick_capture/app/src/main/AndroidManifest.xml): activities, share target, file provider
+- [app/src/main/java/com/quick/capture/MainActivity.kt](/Users/harshad/code/quick_capture/app/src/main/java/com/quick/capture/MainActivity.kt): main UI and delegated capture flows
+- [app/src/main/java/com/quick/capture/SettingsActivity.kt](/Users/harshad/code/quick_capture/app/src/main/java/com/quick/capture/SettingsActivity.kt): settings and SAF folder picking
+- [app/src/main/java/com/quick/capture/ShareImportActivity.kt](/Users/harshad/code/quick_capture/app/src/main/java/com/quick/capture/ShareImportActivity.kt): import shared images/audio
+- [app/src/main/java/com/quick/capture/importing/ImportRepository.kt](/Users/harshad/code/quick_capture/app/src/main/java/com/quick/capture/importing/ImportRepository.kt): import/downsample logic
+- [app/src/main/java/com/quick/capture/storage/SafWriter.kt](/Users/harshad/code/quick_capture/app/src/main/java/com/quick/capture/storage/SafWriter.kt): SAF writes and filename collision handling
 
 ## Build Commands
 

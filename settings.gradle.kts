@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "QLog"
+rootProject.name = "Quick Capture"
 include(":app")

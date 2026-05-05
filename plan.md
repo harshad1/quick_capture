@@ -1,7 +1,7 @@
-# QLog Plan
+# Quick Capture Plan
 
 ## Goal
-Build a thin native Android app called `QLog` that lets the user:
+Build a thin native Android app called `Quick Capture` that lets the user:
 
 - Capture a photo via a system camera intent and save it into a configured SAF folder.
 - Record audio via a delegated system recorder intent and save it into a configured SAF folder.

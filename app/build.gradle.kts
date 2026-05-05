@@ -13,11 +13,11 @@ val localProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.claw.logger"
+    namespace = "com.quick.capture"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.claw.logger"
+        applicationId = "com.quick.capture"
         minSdk = 29
         targetSdk = 35
         versionCode = 1

@@ -1,0 +1,3 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/quick_capture_icon"
+    android:inset="12.5%" />

@@ -1,11 +1,11 @@
-package com.claw.logger.importing
+package com.quick.capture.importing
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import com.claw.logger.data.PhotoScale
-import com.claw.logger.storage.SafWriter
+import com.quick.capture.data.PhotoScale
+import com.quick.capture.storage.SafWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

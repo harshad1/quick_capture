@@ -1,4 +1,4 @@
-package com.claw.logger
+package com.quick.capture
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -11,11 +11,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.claw.logger.data.AppPreferences
-import com.claw.logger.importing.ImportRepository
-import com.claw.logger.storage.SafWriter
-import com.claw.logger.ui.ClawLoggerTheme
-import com.claw.logger.ui.MainScreen
+import com.quick.capture.data.AppPreferences
+import com.quick.capture.importing.ImportRepository
+import com.quick.capture.storage.SafWriter
+import com.quick.capture.ui.QuickCaptureTheme
+import com.quick.capture.ui.MainScreen
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
         importRepository = ImportRepository(this)
 
         setContent {
-            ClawLoggerTheme {
+            QuickCaptureTheme {
                 MainScreen(
                     orientation = resources.configuration.orientation,
                     onPhotoClick = ::launchCamera,
@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val ACTION_TAKE_PHOTO_SHORTCUT = "com.claw.logger.action.TAKE_PHOTO"
-        const val ACTION_RECORD_AUDIO_SHORTCUT = "com.claw.logger.action.RECORD_AUDIO"
+        const val ACTION_TAKE_PHOTO_SHORTCUT = "com.quick.capture.action.TAKE_PHOTO"
+        const val ACTION_RECORD_AUDIO_SHORTCUT = "com.quick.capture.action.RECORD_AUDIO"
     }
 }

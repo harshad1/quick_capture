@@ -1,4 +1,4 @@
-package com.claw.logger
+package com.quick.capture
 
 import android.content.Intent
 import android.net.Uri
@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.claw.logger.data.AppPreferences
-import com.claw.logger.importing.ImportRepository
-import com.claw.logger.storage.SafWriter
+import com.quick.capture.data.AppPreferences
+import com.quick.capture.importing.ImportRepository
+import com.quick.capture.storage.SafWriter
 import kotlinx.coroutines.launch
 
 class ShareImportActivity : ComponentActivity() {

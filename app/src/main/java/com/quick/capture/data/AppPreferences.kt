@@ -1,4 +1,4 @@
-package com.claw.logger.data
+package com.quick.capture.data
 
 import android.content.Context
 import android.net.Uri
@@ -25,7 +25,7 @@ class AppPreferences(context: Context) {
         }
 
     companion object {
-        private const val PREFS_NAME = "claw_logger_prefs"
+        private const val PREFS_NAME = "quick_capture_prefs"
         private const val KEY_PHOTO_SCALE = "photo_scale"
         private const val KEY_PHOTO_FOLDER_URI = "photo_folder_uri"
         private const val KEY_AUDIO_FOLDER_URI = "audio_folder_uri"

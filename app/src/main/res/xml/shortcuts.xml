@@ -7,9 +7,9 @@
         android:shortcutLongLabel="@string/shortcut_take_photo_long"
         android:shortcutShortLabel="@string/shortcut_take_photo">
         <intent
-            android:action="com.claw.logger.action.TAKE_PHOTO"
-            android:targetClass="com.claw.logger.MainActivity"
-            android:targetPackage="com.claw.logger" />
+            android:action="com.quick.capture.action.TAKE_PHOTO"
+            android:targetClass="com.quick.capture.MainActivity"
+            android:targetPackage="com.quick.capture" />
     </shortcut>
 
     <shortcut
@@ -19,8 +19,8 @@
         android:shortcutLongLabel="@string/shortcut_record_audio_long"
         android:shortcutShortLabel="@string/shortcut_record_audio">
         <intent
-            android:action="com.claw.logger.action.RECORD_AUDIO"
-            android:targetClass="com.claw.logger.MainActivity"
-            android:targetPackage="com.claw.logger" />
+            android:action="com.quick.capture.action.RECORD_AUDIO"
+            android:targetClass="com.quick.capture.MainActivity"
+            android:targetPackage="com.quick.capture" />
     </shortcut>
 </shortcuts>

@@ -1,15 +1,15 @@
-package com.claw.logger
+package com.quick.capture
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.documentfile.provider.DocumentFile
-import com.claw.logger.data.AppPreferences
-import com.claw.logger.ui.ClawLoggerTheme
-import com.claw.logger.ui.SettingsScreen
+import com.quick.capture.data.AppPreferences
+import com.quick.capture.ui.QuickCaptureTheme
+import com.quick.capture.ui.SettingsScreen
 
 class SettingsActivity : ComponentActivity() {
     private lateinit var preferences: AppPreferences
@@ -38,12 +38,11 @@ class SettingsActivity : ComponentActivity() {
 
     private fun render() {
         setContent {
-            ClawLoggerTheme {
+            QuickCaptureTheme {
                 SettingsScreen(
                     photoScale = preferences.photoScale,
-                    photoFolderLabel = folderLabel(preferences.photoFolderUri),
-                    audioFolderLabel = folderLabel(preferences.audioFolderUri),
-                    onBack = ::finish,
+                    photoFolderLabel = folderPath(preferences.photoFolderUri),
+                    audioFolderLabel = folderPath(preferences.audioFolderUri),
                     onScaleSelected = {
                         preferences.photoScale = it
                         render()
@@ -55,9 +54,33 @@ class SettingsActivity : ComponentActivity() {
         }
     }
 
-    private fun folderLabel(uri: Uri?): String {
+    private fun folderPath(uri: Uri?): String {
         if (uri == null) return "Not configured"
-        return DocumentFile.fromTreeUri(this, uri)?.name ?: uri.toString()
+        return safPath(uri) ?: uri.path ?: uri.toString()
+    }
+
+    private fun safPath(uri: Uri): String? {
+        val documentId = runCatching { DocumentsContract.getTreeDocumentId(uri) }.getOrNull()
+            ?: return null
+        return when (uri.authority) {
+            "com.android.externalstorage.documents" -> externalStoragePath(documentId)
+            "com.android.providers.downloads.documents" -> {
+                documentId.removePrefix("raw:").takeIf { it != documentId }
+            }
+            else -> null
+        }
+    }
+
+    private fun externalStoragePath(documentId: String): String? {
+        val parts = documentId.split(":", limit = 2)
+        val volume = parts.firstOrNull() ?: return null
+        val relativePath = parts.getOrElse(1) { "" }
+        val root = if (volume.equals("primary", ignoreCase = true)) {
+            "/storage/emulated/0"
+        } else {
+            "/storage/$volume"
+        }
+        return if (relativePath.isBlank()) root else "$root/$relativePath"
     }
 
     private fun persistTreeUri(uri: Uri) {

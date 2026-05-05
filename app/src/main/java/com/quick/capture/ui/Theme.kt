@@ -1,4 +1,4 @@
-package com.claw.logger.ui
+package com.quick.capture.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +30,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun ClawLoggerTheme(content: @Composable () -> Unit) {
+fun QuickCaptureTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = if (isSystemInDarkTheme()) DarkColors else LightColors,
         content = content,
