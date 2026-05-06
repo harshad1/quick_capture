@@ -1,15 +1,19 @@
 package com.quick.capture.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -17,13 +21,16 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.verticalScroll
 import com.quick.capture.data.PhotoScale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,29 +46,36 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
+                title = {
+                    Text(
+                        text = "Settings",
+                        fontWeight = FontWeight.Black,
+                    )
+                },
             )
         },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(
+                    androidx.compose.ui.graphics.Brush.verticalGradient(
+                        colors = appBackgroundGradientColors(),
+                    ),
+                )
                 .padding(innerPadding)
-                .padding(20.dp),
+                .verticalScroll(rememberScrollState())
+                .padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Card(shape = RoundedCornerShape(24.dp)) {
+            SettingsCard {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp),
+                        .padding(18.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Text(
-                        text = "Photo scale",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                    )
+                    SectionTitle("Photo scale")
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         PhotoScale.entries.forEach { scale ->
                             val selected = scale == photoScale
@@ -70,9 +84,9 @@ fun SettingsScreen(
                                 onClick = { onScaleSelected(scale) },
                                 label = { Text(scale.label) },
                                 colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.14f),
+                                    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
                                 ),
                                 border = FilterChipDefaults.filterChipBorder(
                                     enabled = true,
@@ -123,26 +137,45 @@ private fun FolderCard(
     buttonLabel: String,
     onPickFolder: () -> Unit,
 ) {
-    Card(shape = RoundedCornerShape(24.dp)) {
+    SettingsCard {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-            )
-            Button(onClick = onPickFolder) {
+            SectionTitle(title)
+            OutlinedButton(onClick = onPickFolder) {
                 Text(buttonLabel)
             }
             Text(
                 text = folderLabel,
-                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
+}
+
+@Composable
+private fun SettingsCard(content: @Composable ColumnScope.() -> Unit) {
+    Card(
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.18f),
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        content = content,
+    )
+}
+
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Black,
+    )
 }

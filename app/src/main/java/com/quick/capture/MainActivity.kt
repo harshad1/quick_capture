@@ -11,17 +11,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.quick.capture.data.AppPreferences
-import com.quick.capture.importing.ImportRepository
-import com.quick.capture.storage.SafWriter
+import com.quick.capture.importing.CaptureImportResult
+import com.quick.capture.importing.ImportUseCase
 import com.quick.capture.ui.QuickCaptureTheme
 import com.quick.capture.ui.MainScreen
 import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : ComponentActivity() {
-    private lateinit var preferences: AppPreferences
-    private lateinit var importRepository: ImportRepository
+    private lateinit var importUseCase: ImportUseCase
 
     private var pendingPhotoUri: Uri? = null
     private var pendingPhotoFile: File? = null
@@ -33,59 +31,38 @@ class MainActivity : ComponentActivity() {
             return@registerForActivityResult
         }
 
-        val photoFolder = preferences.photoFolderUri
-        if (!SafWriter.persistedFolderExists(this, photoFolder)) {
-            toast("Settings not configured")
-            cleanupPendingPhoto()
-            return@registerForActivityResult
-        }
-
         lifecycleScope.launch {
-            runCatching {
-                importRepository.importImage(
-                    sourceUri = sourceUri,
-                    destinationFolder = requireNotNull(photoFolder),
-                    scale = preferences.photoScale,
-                )
-            }.onSuccess { fileName ->
-                toast("Saved $fileName")
-            }.onFailure {
-                toast("Photo save failed")
+            try {
+                when (val result = importUseCase.importCapturedPhoto(sourceUri)) {
+                    CaptureImportResult.MissingSettings -> toast("Settings not configured")
+                    CaptureImportResult.Failed -> toast("Photo save failed")
+                    is CaptureImportResult.Saved -> toast("Saved ${result.fileName}")
+                }
+            } finally {
+                cleanupPendingPhoto()
             }
-            cleanupPendingPhoto()
         }
     }
 
-    private val recordAudio = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val sourceUri = result.data?.data
-            ?: result.data?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-        val audioFolder = preferences.audioFolderUri
-        if (sourceUri == null || result.resultCode != RESULT_OK) {
-            return@registerForActivityResult
-        }
-        if (!SafWriter.persistedFolderExists(this, audioFolder)) {
-            toast("Settings not configured")
+    private val recordAudio = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        val sourceUri = activityResult.data?.data
+            ?: streamUriFrom(activityResult.data)
+        if (sourceUri == null || activityResult.resultCode != RESULT_OK) {
             return@registerForActivityResult
         }
 
         lifecycleScope.launch {
-            runCatching {
-                importRepository.importAudio(
-                    sourceUri = sourceUri,
-                    destinationFolder = requireNotNull(audioFolder),
-                )
-            }.onSuccess { fileName ->
-                toast("Saved $fileName")
-            }.onFailure {
-                toast("Audio save failed")
+            when (val importResult = importUseCase.importCapturedAudio(sourceUri)) {
+                CaptureImportResult.MissingSettings -> toast("Settings not configured")
+                CaptureImportResult.Failed -> toast("Audio save failed")
+                is CaptureImportResult.Saved -> toast("Saved ${importResult.fileName}")
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferences = AppPreferences(this)
-        importRepository = ImportRepository(this)
+        importUseCase = ImportUseCase(this)
 
         setContent {
             QuickCaptureTheme {
@@ -112,8 +89,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun launchCamera() {
-        val photoFolder = preferences.photoFolderUri
-        if (!SafWriter.persistedFolderExists(this, photoFolder)) {
+        if (!importUseCase.hasPhotoDestination()) {
             toast("Settings not configured")
             return
         }
@@ -130,8 +106,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun launchAudioRecorder() {
-        val audioFolder = preferences.audioFolderUri
-        if (!SafWriter.persistedFolderExists(this, audioFolder)) {
+        if (!importUseCase.hasAudioDestination()) {
             toast("Settings not configured")
             return
         }
@@ -158,6 +133,11 @@ class MainActivity : ComponentActivity() {
 
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun streamUriFrom(intent: Intent?): Uri? {
+        return intent?.getParcelableExtra(Intent.EXTRA_STREAM)
     }
 
     companion object {

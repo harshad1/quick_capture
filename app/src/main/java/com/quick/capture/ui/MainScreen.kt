@@ -1,6 +1,7 @@
 package com.quick.capture.ui
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +46,12 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Quick Capture") },
+                title = {
+                    Text(
+                        text = "Quick Capture",
+                        fontWeight = FontWeight.Black,
+                    )
+                },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(
@@ -60,14 +68,11 @@ fun MainScreen(
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.surface,
-                        ),
+                        colors = appBackgroundGradientColors(),
                     ),
                 )
                 .padding(innerPadding)
-                .padding(20.dp),
+                .padding(18.dp),
         ) {
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Row(
@@ -78,15 +83,15 @@ fun MainScreen(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Rounded.CameraAlt,
                         contentDescription = "Take photo",
+                        label = "Take Photo",
                         onClick = onPhotoClick,
-                        primary = true,
                     )
                     ActionCard(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Rounded.Mic,
                         contentDescription = "Record audio",
+                        label = "Record Audio",
                         onClick = onAudioClick,
-                        primary = false,
                     )
                 }
             } else {
@@ -98,15 +103,15 @@ fun MainScreen(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Rounded.CameraAlt,
                         contentDescription = "Take photo",
+                        label = "Take Photo",
                         onClick = onPhotoClick,
-                        primary = true,
                     )
                     ActionCard(
                         modifier = Modifier.weight(1f),
                         icon = Icons.Rounded.Mic,
                         contentDescription = "Record audio",
+                        label = "Record Audio",
                         onClick = onAudioClick,
-                        primary = false,
                     )
                 }
             }
@@ -119,28 +124,24 @@ private fun ActionCard(
     modifier: Modifier,
     icon: ImageVector,
     contentDescription: String,
+    label: String,
     onClick: () -> Unit,
-    primary: Boolean,
 ) {
-    val colors = if (primary) {
-        ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-        )
-    } else {
-        ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = MaterialTheme.colorScheme.onSecondary,
-        )
-    }
-
     Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(32.dp)),
-        shape = RoundedCornerShape(32.dp),
-        colors = colors,
+            .clip(RoundedCornerShape(24.dp)),
+        shape = RoundedCornerShape(24.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.22f),
+        ),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 1.dp),
     ) {
         Column(
             modifier = Modifier
@@ -152,7 +153,13 @@ private fun ActionCard(
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                modifier = Modifier.size(88.dp),
+                modifier = Modifier.size(42.dp),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = label,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Black,
             )
         }
     }
